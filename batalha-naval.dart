@@ -1,5 +1,6 @@
 import 'dart: io';
 import 'dart: math';
+import 'dart:io';
 import 'dart:math';
 
 // - Classe Ponto - 
@@ -73,4 +74,62 @@ void imprimirPlacar(String nomeT1, int pontosT1, String nomeT2, int pontosT2){
  print ($nomeT1: $pontosT1 acertos(s)'); 
  print ('$nomeT2:  $pontosT2 acerto(s)');
  print('-------');
+}
+//-- Ler cordenadas jogador
+Ponto?lerCordenada(){
+    stdout.write('digite a cordenada (ex:A1):');
+    String entrada = stdin.readLineSync()??"";
+    entrada = entrada.trim().toUpperCase();
+    
+    if (entrada.length < 2) return null;
+
+    int coluna = entrada.codeUnitAt(0) -65;
+    int? linha = int.tryParse(entrada.substring(1));
+
+    if (linha ==null) return null;
+    linha = linha - 1;
+
+    if (linha < 0 || LINHA >=TAMANHO) return null;
+    if (coluna <0 || coluna >= TAMANHO) return null;
+
+    return Pomto(linha, coluna);
+}
+
+//--main --
+
+void main(){
+    print ('=== BATALHA NAVAL 16X16 ===\n');
+
+    // Nome dos times 
+    stdout.write('nome do time 1:');
+    String nome T1 = stdin.readLineSync()?? 'Time 1';
+    stdout.write('Nome do time 2:');
+    String nome T2 = stdin.readLineSync()?? 'Time 2';
+
+    //tabuleiros 
+
+    List<List<String>> tabuleiroT1 = criarTabuleiro();
+    List<List<String>> tabuleiroT2 = criarTabuleiro();
+
+    //Posicionar navios tamanho 5
+    List<Ponto> navioT1 = posicionarNavio(tabuleiroT1, 5);
+    List<Ponto> navioT2 = posicionarNavio(tabuleiroT2, 5);
+
+    print ('\nNavios posicionados! Tamanho: 5 ceelulas cada.')
+     //Placar 
+     int pontosT1 = 0 ;
+     int pontosT2 = 0 ;
+     int acertosT1 = 0 ;
+     int acertosT2 = 0 ;
+
+     int rodada = 1;
+
+     while (true) {
+        print('\n====== RODADA $rodada ======');
+        imprimirPlacar(nomeT1, pontosT1, nomeT2, pontosT2);
+
+        //-- Turno Time 1 --
+        print('\n[$nomeT1]- Seu turno!');
+        imprimirPlacar(nomeT1, pontosT1, nomeT2, pontosT2)
+     }
 }
