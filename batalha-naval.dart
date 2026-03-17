@@ -1,135 +1,160 @@
-import 'dart: io';
-import 'dart: math';
 import 'dart:io';
-import 'dart:math';
 
-// - Classe Ponto - 
-classe ponto {
-    int linha; 
-    int coluna;
-    Ponto (this.linha, this.coluna );
-}
+class BatalhaNaval {
+  int tamanho = 16;
 
-// - Tabuleiro 16x16 -
-const int TAMANHO = 16;
+  List<List<String>> tabuleiroNavios = [];
+  List<List<String>> tabuleiroTiros = [];
 
-List<list<String>> Criar Tabuleiro(){
-    return List.generate(TAMANHO, (_) = > List.filled(TAMANHO, '~'));
+  BatalhaNaval() {
+    tabuleiroNavios = List.generate(
+      tamanho,
+      (_) => List.generate(tamanho, (_) => "[ ]"),
+    );
 
-}
+    tabuleiroTiros = List.generate(
+      tamanho,
+      (_) => List.generate(tamanho, (_) => "[ ]"),
+    );
+  }
 
-// - Posicionar navio aleatorio-
-List<Ponto> posicionarnavio(List<List<String>> tabuleiro, int tamanho){
-     Random rng = Random();
-  List<Ponto> posicoes = [];
+  void exibirTabuleiroTiros() {
+    print("\nTABULEIRO:");
 
-}
-
-while (true) {
-    posicoes = [];
-    bool horizontal = rng.nextBool();
-    int linha = rng.nextlnt(TAMANHO);
-    int coluna = rng.nextInt(TAMANHO);
-
-    bool cabe = true;
-    for (int i = 0; < tamanho; i++){
-        int I = horizontal ? linha: linha + i ;
-        int c = horizontal ? coluna + i : coluna;
-        if (I> = TAMANHO || c>= TAMANHO ){
-            cabe = false;
-            break;
-        }
-           posicoes.add(Ponto(l, c));
-
+    stdout.write("   ");
+    for (int j = 0; j < tamanho; j++) {
+      stdout.write("$j ");
     }
-    if (cabe ) {
-        for (Ponto p in posicoes){
-            tabuleiro[p.linha][p.coluna]= 'N';
-        }
-        return posicoes;
+    print("");
+
+    for (int i = 0; i < tamanho; i++) {
+      stdout.write("$i ");
+
+      for (int j = 0; j < tamanho; j++) {
+        stdout.write(tabuleiroTiros[i][j]);
+      }
+
+      print("");
     }
-}
+  }
 
-// - Imprimir tabuleiro -
-void imprimirTabuleiro(List<List<String>> tabuleiro, String titulo){
-    print ('\m$titulo')
-    stdout.write('');
-    for (int c = 0; c < TAMANHO; c++){
-        stdout.write('${String.fromCharCode(65+c)}')
+  void posicionarNavio(int linha, int coluna, int tamanhoNavio) {
+    for (int i = 0; i < tamanhoNavio; i++) {
+      tabuleiroNavios[linha][coluna + i] = "[S]";
     }
-    print('');
+  }
 
-    for (int I = 0; I < TAMANHO; I++) {
-        stdout.write('${(I + 1).toString().padLeft(2)}');
-        for (int c = 0; c< TAMANHO; c++){
-        stdout.write('${tabuleiro[|][c]}');    
-        }
-       print(''); 
+  bool atirar(int linha, int coluna) {
+    if (tabuleiroNavios[linha][coluna] == "[S]") {
+      tabuleiroTiros[linha][coluna] = "[X]";
+      return true;
+    } else {
+      tabuleiroTiros[linha][coluna] = "[~]";
+      return false;
     }
+  }
 }
 
-// - Placar-
-void imprimirPlacar(String nomeT1, int pontosT1, String nomeT2, int pontosT2){
- print ('\---PLACAR---');
- print ($nomeT1: $pontosT1 acertos(s)'); 
- print ('$nomeT2:  $pontosT2 acerto(s)');
- print('-------');
-}
-//-- Ler cordenadas jogador
-Ponto?lerCordenada(){
-    stdout.write('digite a cordenada (ex:A1):');
-    String entrada = stdin.readLineSync()??"";
-    entrada = entrada.trim().toUpperCase();
-    
-    if (entrada.length < 2) return null;
-
-    int coluna = entrada.codeUnitAt(0) -65;
-    int? linha = int.tryParse(entrada.substring(1));
-
-    if (linha ==null) return null;
-    linha = linha - 1;
-
-    if (linha < 0 || LINHA >=TAMANHO) return null;
-    if (coluna <0 || coluna >= TAMANHO) return null;
-
-    return Pomto(linha, coluna);
+void limparTela() {
+  stdout.write("\x1B[2J\x1B[0;0H");
 }
 
-//--main --
+void posicionarNavioJogador(BatalhaNaval jogo, String jogador) {
+  int tamanhoNavio;
 
-void main(){
-    print ('=== BATALHA NAVAL 16X16 ===\n');
+  while (true) {
+    print("\n$jogador escolha o tamanho do navio:");
+    tamanhoNavio = int.parse(stdin.readLineSync()!);
 
-    // Nome dos times 
-    stdout.write('nome do time 1:');
-    String nome T1 = stdin.readLineSync()?? 'Time 1';
-    stdout.write('Nome do time 2:');
-    String nome T2 = stdin.readLineSync()?? 'Time 2';
+    stdout.write("Linha inicial: ");
+    int linha = int.parse(stdin.readLineSync()!);
 
-    //tabuleiros 
+    stdout.write("Coluna inicial: ");
+    int coluna = int.parse(stdin.readLineSync()!);
 
-    List<List<String>> tabuleiroT1 = criarTabuleiro();
-    List<List<String>> tabuleiroT2 = criarTabuleiro();
+    if (coluna + tamanhoNavio > jogo.tamanho) {
+      print("⚠ O navio não cabe no tabuleiro. Tente novamente.");
+    } else {
+      jogo.posicionarNavio(linha, coluna, tamanhoNavio);
+      break;
+    }
+  }
+}
 
-    //Posicionar navios tamanho 5
-    List<Ponto> navioT1 = posicionarNavio(tabuleiroT1, 5);
-    List<Ponto> navioT2 = posicionarNavio(tabuleiroT2, 5);
+void main() {
+  stdout.write("Nome do Jogador 1: ");
+  String jogador1 = stdin.readLineSync()!;
 
-    print ('\nNavios posicionados! Tamanho: 5 ceelulas cada.')
-     //Placar 
-     int pontosT1 = 0 ;
-     int pontosT2 = 0 ;
-     int acertosT1 = 0 ;
-     int acertosT2 = 0 ;
+  stdout.write("Nome do Jogador 2: ");
+  String jogador2 = stdin.readLineSync()!;
 
-     int rodada = 1;
+  BatalhaNaval jogo1 = BatalhaNaval();
+  BatalhaNaval jogo2 = BatalhaNaval();
 
-     while (true) {
-        print('\n====== RODADA $rodada ======');
-        imprimirPlacar(nomeT1, pontosT1, nomeT2, pontosT2);
+  posicionarNavioJogador(jogo1, jogador1);
 
-        //-- Turno Time 1 --
-        print('\n[$nomeT1]- Seu turno!');
-        imprimirPlacar(nomeT1, pontosT1, nomeT2, pontosT2)
-     }
+  print("\nPasse o computador para $jogador2 e pressione ENTER");
+  stdin.readLineSync();
+  limparTela();
+
+  posicionarNavioJogador(jogo2, jogador2);
+
+  print("\nPressione ENTER para começar a batalha!");
+  stdin.readLineSync();
+  limparTela();
+
+  bool venceu = false;
+
+  while (!venceu) {
+    print("\nTurno de $jogador1");
+    jogo2.exibirTabuleiroTiros();
+
+    stdout.write("Linha do tiro: ");
+    int linha = int.parse(stdin.readLineSync()!);
+
+    stdout.write("Coluna do tiro: ");
+    int coluna = int.parse(stdin.readLineSync()!);
+
+    bool acerto = jogo2.atirar(linha, coluna);
+
+    jogo2.exibirTabuleiroTiros();
+
+    if (acerto) {
+      print(" Acertou o navio!");
+      print(" $jogador1 venceu!");
+      venceu = true;
+      break;
+    } else {
+      print("Água!");
+    }
+
+    print("\nPasse o computador para $jogador2 e pressione ENTER");
+    stdin.readLineSync();
+    limparTela();
+
+    print("\nTurno de $jogador2");
+    jogo1.exibirTabuleiroTiros();
+
+    stdout.write("Linha do tiro: ");
+    int linha2 = int.parse(stdin.readLineSync()!);
+
+    stdout.write("Coluna do tiro: ");
+    int coluna2 = int.parse(stdin.readLineSync()!);
+
+    bool acerto2 = jogo1.atirar(linha2, coluna2);
+
+    jogo1.exibirTabuleiroTiros();
+
+    if (acerto2) {
+      print(" Acertou o navio!");
+      print(" $jogador2 venceu!");
+      venceu = true;
+    } else {
+      print("🌊 Água!");
+    }
+
+    print("\nPasse o computador para $jogador1 e pressione ENTER");
+    stdin.readLineSync();
+    limparTela();
+  }
 }
