@@ -1,5 +1,12 @@
 import 'dart:io';
 
+class Ponto {
+  int linha;
+  int coluna;
+
+  Ponto(this.linha, this.coluna);
+}
+
 class BatalhaNaval {
   int tamanho = 16;
 
@@ -44,12 +51,12 @@ class BatalhaNaval {
     }
   }
 
-  bool atirar(int linha, int coluna) {
-    if (tabuleiroNavios[linha][coluna] == "[S]") {
-      tabuleiroTiros[linha][coluna] = "[X]";
+  bool atirar(Ponto ponto) {
+    if (tabuleiroNavios[ponto.linha][ponto.coluna] == "[S]") {
+      tabuleiroTiros[ponto.linha][ponto.coluna] = "[X]";
       return true;
     } else {
-      tabuleiroTiros[linha][coluna] = "[~]";
+      tabuleiroTiros[ponto.linha][ponto.coluna] = "[~]";
       return false;
     }
   }
@@ -82,6 +89,9 @@ void posicionarNavioJogador(BatalhaNaval jogo, String jogador) {
 }
 
 void main() {
+  int placarJogador1 = 0;
+  int placarJogador2 = 0;
+
   stdout.write("Nome do Jogador 1: ");
   String jogador1 = stdin.readLineSync()!;
 
@@ -115,17 +125,19 @@ void main() {
     stdout.write("Coluna do tiro: ");
     int coluna = int.parse(stdin.readLineSync()!);
 
-    bool acerto = jogo2.atirar(linha, coluna);
+    Ponto tiro = Ponto(linha, coluna);
+    bool acerto = jogo2.atirar(tiro);
 
     jogo2.exibirTabuleiroTiros();
 
     if (acerto) {
-      print(" Acertou o navio!");
-      print(" $jogador1 venceu!");
+      print("💥 ACERTOU O NAVIO!");
+      placarJogador1++;
+      print("🏆 $jogador1 venceu!");
       venceu = true;
       break;
     } else {
-      print("Água!");
+      print("🌊 Água!");
     }
 
     print("\nPasse o computador para $jogador2 e pressione ENTER");
@@ -141,13 +153,15 @@ void main() {
     stdout.write("Coluna do tiro: ");
     int coluna2 = int.parse(stdin.readLineSync()!);
 
-    bool acerto2 = jogo1.atirar(linha2, coluna2);
+    Ponto tiro2 = Ponto(linha2, coluna2);
+    bool acerto2 = jogo1.atirar(tiro2);
 
     jogo1.exibirTabuleiroTiros();
 
     if (acerto2) {
-      print(" Acertou o navio!");
-      print(" $jogador2 venceu!");
+      print("💥 ACERTOU O NAVIO!");
+      placarJogador2++;
+      print("🏆 $jogador2 venceu!");
       venceu = true;
     } else {
       print("🌊 Água!");
@@ -157,4 +171,8 @@ void main() {
     stdin.readLineSync();
     limparTela();
   }
+
+  print("\n===== PLACAR FINAL =====");
+  print("$jogador1: $placarJogador1");
+  print("$jogador2: $placarJogador2");
 }
