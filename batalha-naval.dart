@@ -25,25 +25,25 @@ class BatalhaNaval {
     );
   }
 
-  void exibirTabuleiroTiros() {
-    print("\nTABULEIRO:");
+void exibirTabuleiroTiros() {
+  print("\nTABULEIRO:");
 
-    stdout.write("   ");
-    for (int j = 0; j < tamanho; j++) {
-      stdout.write("$j ");
-    }
-    print("");
-
-    for (int i = 0; i < tamanho; i++) {
-      stdout.write("$i ");
-
-      for (int j = 0; j < tamanho; j++) {
-        stdout.write(tabuleiroTiros[i][j]);
-      }
-
-      print("");
-    }
+  stdout.write("   ");
+  for (int j = 0; j < tamanho; j++) {
+    stdout.write("${j.toString().padLeft(2, '0')} ");
   }
+  print("");
+
+  for (int i = 0; i < tamanho; i++) {
+    stdout.write("${i.toString().padLeft(2, '0')} ");
+
+    for (int j = 0; j < tamanho; j++) {
+      stdout.write(tabuleiroTiros[i][j]);
+    }
+
+    print("");
+  }
+}
 
   void posicionarNavio(int linha, int coluna, int tamanhoNavio) {
     for (int i = 0; i < tamanhoNavio; i++) {
@@ -131,13 +131,13 @@ void main() {
     jogo2.exibirTabuleiroTiros();
 
     if (acerto) {
-      print("💥 ACERTOU O NAVIO!");
+      print(" ACERTOU O NAVIO!");
       placarJogador1++;
-      print("🏆 $jogador1 venceu!");
+      print(" $jogador1 venceu!");
       venceu = true;
       break;
     } else {
-      print("🌊 Água!");
+      print(" Água!");
     }
 
     print("\nPasse o computador para $jogador2 e pressione ENTER");
@@ -159,12 +159,12 @@ void main() {
     jogo1.exibirTabuleiroTiros();
 
     if (acerto2) {
-      print("💥 ACERTOU O NAVIO!");
+      print(" ACERTOU O NAVIO!");
       placarJogador2++;
-      print("🏆 $jogador2 venceu!");
+      print(" $jogador2 venceu!");
       venceu = true;
     } else {
-      print("🌊 Água!");
+      print(" Água!");
     }
 
     print("\nPasse o computador para $jogador1 e pressione ENTER");
