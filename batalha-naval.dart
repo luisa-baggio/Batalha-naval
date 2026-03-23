@@ -2,7 +2,7 @@ import 'dart:io'; // importa a biblioteca para entrada (teclado) e saída (print
 
 // Classe que representa uma coordenada no tabuleiro
 class Ponto {
-  int linha;  // representa a linha (vertical)
+  int linha; // representa a linha (vertical)
   int coluna; // representa a coluna (horizontal)
 
   // Construtor: recebe linha e coluna e já salva nos atributos
@@ -15,7 +15,7 @@ class BatalhaNaval {
 
   // Matrizes (listas 2D)
   List<List<String>> tabuleiroNavios = []; // guarda onde estão os navios
-  List<List<String>> tabuleiroTiros = [];  // guarda tiros (acertos e erros)
+  List<List<String>> tabuleiroTiros = []; // guarda tiros (acertos e erros)
 
   // Construtor da classe (executa quando cria o jogo)
   BatalhaNaval() {
@@ -160,7 +160,7 @@ void main() {
     int coluna = int.parse(stdin.readLineSync()!);
 
     Ponto tiro = Ponto(linha, coluna); // cria ponto do tiro
-    bool acerto = jogo2.atirar(tiro);  // realiza tiro
+    bool acerto = jogo2.atirar(tiro); // realiza tiro
 
     jogo2.exibirTabuleiroTiros();
 
@@ -180,18 +180,31 @@ void main() {
     limparTela();
 
     // ===== TURNO JOGADOR 2 =====
+    // Exibe na tela de qual jogador é o turno atual
     print("\nTurno de $jogador2");
+
+    // Mostra o tabuleiro de tiros (onde já foram feitos disparos)
     jogo1.exibirTabuleiroTiros();
 
+    // Pede ao jogador a linha onde deseja atirar
     stdout.write("Linha do tiro: ");
+
+    // Lê a linha digitada pelo usuário e converte para número inteiro
     int linha2 = int.parse(stdin.readLineSync()!);
 
+    // Pede ao jogador a coluna onde deseja atirar
     stdout.write("Coluna do tiro: ");
+
+    // Lê a coluna digitada pelo usuário e converte para número inteiro
     int coluna2 = int.parse(stdin.readLineSync()!);
 
+    // Cria um objeto Ponto com a posição escolhida (linha e coluna)
     Ponto tiro2 = Ponto(linha2, coluna2);
+
+    // Realiza o disparo no tabuleiro e verifica se acertou algum alvo
     bool acerto2 = jogo1.atirar(tiro2);
 
+    // Exibe novamente o tabuleiro atualizado após o tiro
     jogo1.exibirTabuleiroTiros();
 
     if (acerto2) {
